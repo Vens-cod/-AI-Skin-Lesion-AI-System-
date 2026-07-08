@@ -1,3 +1,59 @@
 # -AI-Skin-Lesion-AI-System-
-基于ResNet50的⽪肤病变数据集的AI识别(Skin Lesion AI System)
-其中数据集要去下载（大概7000张）  下载网址：https://www.kaggle.com/datasets/avijit0001/ham10000-tree-classwise
+
+基于深度学习的皮肤病变智能识别系统
+一个完整的皮肤病变图像识别系统，基于 PyTorch + ResNet50 迁移学习，搭载 Gradio Web 交互界面和 MySQL 历史记录管理。
+
+📌 项目简介
+本项目实现了一套从数据加载 → 模型训练 → 推理部署 → 交互展示的完整 AI 应用闭环。系统能够识别 7 类皮肤病变（包括黑色素瘤、基底细胞癌等），并提供友好的 Web 界面和持久化数据管理。
+
+✨ 功能特性
+功能模块	说明
+🧠 模型训练	ResNet50 迁移学习 + 加权损失，处理类别不平衡
+🔍 图像识别	支持 TTA（测试时增强），输出 7 类概率分布
+🌐 Web 界面	Gradio 构建，支持图片上传、拖拽、摄像头拍照
+📊 结果可视化	概率条形图 + 良恶性提示（良性/恶性/癌前病变）
+📋 历史记录	MySQL 存储，支持分页查询、类别筛选、时间筛选
+📈 统计分析	各类别识别数量统计
+🗑️ 数据管理	支持记录删除
+🛠️ 技术栈
+技术	版本	用途
+Python	3.9+	项目语言
+PyTorch	2.5.1+	深度学习框架
+torchvision	0.20.1+	图像预处理、预训练模型
+Gradio	3.50+	Web 交互界面
+MySQL	5.7 / 8.0	历史记录存储
+pymysql	最新	Python MySQL 驱动
+matplotlib	3.5+	概率条形图绘制
+📁 项目结构
+text
+皮肤病变识别系统/
+├── app.py              # Gradio Web 界面（表现层）
+├── config.py           # 全局配置（数据库、类别映射）
+├── database.py         # MySQL 数据库操作（数据访问层）
+├── inference.py        # 推理引擎（业务逻辑层）
+├── model.py            # ResNet50 网络结构定义
+├── train.py            # 模型训练脚本
+├── utils.py            # 辅助工具（绘图、格式化）
+├── test.py             # 数据库功能测试脚本
+├── requirements.txt    # Python 依赖清单
+├── training_curves.png # 训练曲线图
+├── checkpoints/
+│   └── best_model.pth  # 训练好的模型权重
+└── data/
+    └── HAM10000_Tree/  # 数据集（需自行下载）
+        ├── train/      # 训练集 (7,010张)
+        ├── val/        # 验证集 (1,502张)
+        └── test/       # 测试集 (1,503张)
+📊 数据集
+使用 HAM10000（Human Against Machine with 10000 training images）数据集，由维也纳医科大学等机构于 2018 年发布。
+
+7 类皮肤病变
+缩写	中文名称	样本数	良恶性
+nv	黑素细胞痣	6,705	良性
+mel	黑色素瘤	1,113	恶性 ⚠️
+bkl	良性角化病	1,099	良性
+bcc	基底细胞癌	514	低度恶性
+akiec	日光性角化病	327	癌前病变
+vasc	血管病变	142	良性
+df	皮肤纤维瘤	115	良性
+⚠️ 数据存在严重类别不平衡：nv 类占 67%，df 类仅占 1.1%。本系统通过加权损失函数缓解该问题。
